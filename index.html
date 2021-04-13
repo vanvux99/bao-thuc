@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đồng hồ báo thức</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <!-- <h1>abc</h1> -->
+    <div class="content-ok">
+        <h1> Đồng hồ báo thức trực tuyến </h1>
+        <div>
+            <p>Hôm nay là</p>
+            <p id="date"> </p>
+        </div>
+        <div>
+            <span>Bây giờ là: </span>
+            <span id="gio">00</span><span> giờ</span>
+            <span id="phut">00</span><span> phút</span>
+            <span id="giay">00</span><span> giây</span>
+        </div>
+        <br>
+        <div>
+            <span>Nhập số giờ cần hẹn trước: </span>
+            <br>
+            <span>
+                <input type="text" placeholder="giờ" id="hdGio"/>
+                <input type="text" placeholder="phút" id="hdPhut"/>
+                <input type="text" placeholder="giây" id="hdGiay"/>
+            </span>
+        </div>
+        <div>
+            <hr>
+            <span>
+                <input type="button" value=" Hẹn giờ " onclick="henGio(1)"> 
+            </span>
+            <span>
+                <input type="button" value=" Tắt báo thức " onclick="henGio(2)"> 
+            </span>
+        </div>
+    </div>
+
+    <script>
+        let date = document.querySelector("#date")
+        let gio = document.querySelector("#gio")
+        let phut = document.querySelector("#phut")
+        let giay = document.querySelector("#giay")
+        let hdGio = document.querySelector("#hdGio")
+        let hdPhut = document.querySelector("#hdPhut")
+        let hdGiay = document.querySelector("#hdGiay")
+        var audio = new Audio('Audio_MP3/baothuc.mp3')
+
+        date.innerHTML = "Ngày " + new Date().getDate() + " tháng " + (new Date().getMonth() + 1) + " năm " + new Date().getFullYear()
+
+        setInterval(function() {
+            gio.innerHTML = new Date().getHours()
+            phut.innerHTML = new Date().getMinutes()
+            giay.innerHTML = new Date().getSeconds()
+        }, 1000)
+
+        var checkInput = () => {
+            if (hdGio.value != "" && hdPhut.value != "" && hdGiay.value != "") {
+                if (hdGio.value < 0 && hdGio.value > 25) {
+                    return false
+                }
+                if (hdPhut.value < 0 && hdPhut.value > 61) {
+                    return false
+                }
+                if (hdGiay.value < 0 && hdGiay.value > 61) {
+                    return false
+                }
+                return true
+            } else {
+                return false
+            }
+        }
+
+        var alarm = () => {
+            if (new Date().getHours() == hdGio.value && new Date().getMinutes() == hdPhut.value && new Date().getSeconds() == hdGiay.value) {
+                audio.play()
+            }
+        }
+
+        var henGio = (id) => {
+            // so sánh, nếu thời gian hẹn mà nhỏ hơn thời gian hiện tại 12 tiếng thì báo không hợp lệ - chưa làm được
+            // kiểm tra các giá trị nhập vào là số và thỏa mán các đk
+            switch (id) {
+                case 1:
+                    if (checkInput() == true) {
+                        setInterval(alarm, 1000)
+                    }
+                    break
+                case 2:
+                    audio.pause()
+                    break
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
